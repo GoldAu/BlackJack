@@ -29,8 +29,8 @@ public class BlackJack0{
 										  */
 		
 		int players = sc.nextInt();
-		while(players > 5){
-			System.out.println("Max amount of players is 5!");
+		while(players > 5 || players < 1){
+			System.out.println("Max amount of players is 5! And no negative numbers!");
 			players = sc.nextInt();
 		}
 		Player[] x = new Player[players];
