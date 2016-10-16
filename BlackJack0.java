@@ -24,7 +24,9 @@ public class BlackJack0{
 			deckCards[i + 3*suitCards] = new Cards((i % 10) + 1, 3);
 		}
 		
-		System.out.println("How many players are there? (Maximum of 5)");
+		System.out.println("How many players are there? (Maximum of 5)"); /*Technically doesn't have to be 5,
+										    but for the game's sake I made it five.
+										  */
 		
 		int players = sc.nextInt();
 		while(players > 5){
