@@ -43,7 +43,7 @@ public class Cards{
 			return faceCard;
 	}
 	public int getCardNumber(){
-			return cardNumber;
+		return cardNumber;
 	}
 	public boolean isAFaceCard(){
 		return faceCardNumber;
