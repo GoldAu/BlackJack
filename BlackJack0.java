@@ -29,11 +29,16 @@ public class BlackJack0{
 			int players = sc.nextInt();
 			int rand1 = (int)(Math.random()* totalCards.size());
 			int playerTotal = totalCards.get(rand1).getCardNumber();
-			System.out.print("Your cards are: " + totalCards.get(rand1).getCardNumber() + " of " + totalCards.remove(rand1).getSuit());
+			
+			System.out.print("Your cards are: " + totalCards.get(rand1).getCardNumber() + 
+			" of " + totalCards.remove(rand1).getSuit());
+			
 			int rand2 = (int)(Math.random()* totalCards.size());
 			playerTotal += totalCards.get(rand2).getCardNumber();
-			System.out.println(" and " + totalCards.get(rand2).getCardNumber() + " of " + totalCards.remove(rand2).getSuit()
-					+ " for a total of " + playerTotal);
+			
+			System.out.println(" and " + totalCards.get(rand2).getCardNumber() 
+			+ " of " + totalCards.remove(rand2).getSuit() + " for a total of " + playerTotal);
+			
 			System.out.println("would you like to hit or stay? (Press 1 to hit and 0 to stay)");
 			boolean hit;
 			int hitCheck = sc.nextInt();
@@ -47,13 +52,14 @@ public class BlackJack0{
 				int rand3 = (int)(Math.random()* totalCards.size());
 				playerTotal += totalCards.get(rand3).getCardNumber();
 				if(totalCards.get(rand3).isAFaceCard()){
-					System.out.println("You just got a " + totalCards.get(rand3).getFaceCard() + " of " + totalCards.remove(rand3).getSuit() + " for a total"
-							+ " of " + playerTotal);
+					System.out.println("You just got a " + totalCards.get(rand3).getFaceCard()
+					+ " of " + totalCards.remove(rand3).getSuit() + " for a total"+ " of " + playerTotal);
 				}
 				else{
-				System.out.println("You just got a " + totalCards.get(rand3).getCardNumber() + " of " + totalCards.remove(rand3).getSuit() + " for a total"
-						+ " of " + playerTotal);
-				}
+				
+					System.out.println("You just got a " + totalCards.get(rand3).getCardNumber()
+					+ " of " + totalCards.remove(rand3).getSuit() + " for a total of " + playerTotal);
+				
 				if(playerTotal > 21){ //Checks for Bust
 					System.out.println("You have Busted!");
 					hit = false;
@@ -88,10 +94,14 @@ public class BlackJack0{
 				}
 				if(!bust){
 					if(!dealerBust){
-						if(dealerTotal <= playerTotal)
-							System.out.println("The dealer's total was " + dealerTotal + ", and your total was " + playerTotal + ", so you win!");
-						else if(dealerTotal > playerTotal)
-							System.out.println("The dealer's total was " + dealerTotal + ", and your total was " + playerTotal + ", so you lose!");
+						if(dealerTotal <= playerTotal){
+							System.out.println("The dealer's total was " + dealerTotal + 
+							", and your total was " + playerTotal + ", so you win!");
+						}
+						else if(dealerTotal > playerTotal){
+							System.out.println("The dealer's total was " + dealerTotal + 
+							", and your total was " + playerTotal + ", so you lose!");
+						}
 					}//End if(!dealerBust){
 					else
 						System.out.println("The dealer has busted with a total of " + dealerTotal + "! You win!");
