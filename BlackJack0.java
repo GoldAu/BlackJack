@@ -1,87 +1,108 @@
 import java.util.Scanner;
+import java.util.*;
 public class BlackJack0{
 	public static void main(String[] args){
+		boolean blackJack = false;
+		boolean dealerBust = false;
+		boolean bust = false;
 		int cards = 52;
 		final int suits = 4;
 		int drawCardsSuits = cards/suits;
 		Scanner sc = new Scanner(System.in);
-		boolean gameOver = false;
+		boolean gameOn = true;
+		//while gameOn is true, the player will continue to be prompted via terminal
+		while(gameOn){
+			System.out.println("How many decks would you like to play with?");
+			int decks = sc.nextInt();
+			ArrayList<Cards> totalCards = new ArrayList<Cards>(52*decks);
 		
-		System.out.println("How many decks would you like to play with?");
-		
-		int decks = sc.nextInt();
-		Cards[] deckCards = new Cards[decks * cards];
-		int suitCards = deckCards.length / 4;
-		for(int i = 0; i < suitCards; i++){ //Initialize first suit of cards
-			deckCards[i] = new Cards((i % 13) + 1, 0);
-		}
-		for(int i = 0; i < suitCards; i++){
-			deckCards[i + suitCards] = new Cards((i % 13) + 1, 1);
-		}
-		for(int i = 0; i < suitCards; i++){
-			deckCards[i + 2 * suitCards] = new Cards((i % 13) + 1, 2);
-		}
-		for(int i = 0; i < suitCards; i++){
-			deckCards[i + 3 * suitCards] = new Cards((i % 13) + 1, 3);
-		}
-		
-		System.out.println("How many players are there? (Maximum of 5)");
-		int players = sc.nextInt();
-		while(players > 5 || players < 1){
-			System.out.println("Maximum of 5 and at least one player");
-			players = sc.nextInt();
-		}
-		Player[] x = new Player[players];
-		for(int i = 0; i < x.length; i++){
-			int drawRand = (int)(Math.random() * deckCards.length);
-			int drawRand2 = (int)(Math.random() * deckCards.length);
-			while(deckCards[drawRand] == null || deckCards[drawRand] == deckCards[drawRand2])
-				drawRand = (int)(Math.random() * deckCards.length);
-			while(deckCards[drawRand2] == null || deckCards[drawRand] == deckCards[drawRand2])
-				drawRand2 = (int)(Math.random() * deckCards.length);
-			x[i] = new Player(deckCards[drawRand].getCardNumber(), 
-					deckCards[drawRand2].getCardNumber());
-			if(deckCards[drawRand2].isAFaceCard() && deckCards[drawRand].isAFaceCard()){
-				System.out.println("Player " + (i + 1) + " has a "
-						+ deckCards[drawRand].getFaceCard() + " of "
-						+ deckCards[drawRand].getSuit() + " and a "
-						+ deckCards[drawRand2].getFaceCard() + " of "
-						+ deckCards[drawRand2].getSuit() + " for a total of "
-						+ (deckCards[drawRand].getCardNumber() + deckCards[drawRand2].getCardNumber()));
-				deckCards[drawRand] = null;
-				deckCards[drawRand2] = null;
+			//Initializing every cards object in ArrayList totalCards
+			for(int i = 0; i < suits; i++){
+				for(int n = 0; n < drawCardsSuits*decks; n++){
+					int cardNumber = (n%13) + 1;
+					Cards holder = new Cards(cardNumber,i);
+					totalCards.add(holder);
+				}
 			}
-			else if(deckCards[drawRand].isAFaceCard()){
-				System.out.println("Player " + (i + 1) + " has a "
-						+ deckCards[drawRand].getFaceCard() + " of "
-						+ deckCards[drawRand].getSuit() + " and a "
-						+ deckCards[drawRand2].getCardNumber() + " of "
-						+ deckCards[drawRand2].getSuit() + " for a total of "
-						+ (deckCards[drawRand].getCardNumber() + deckCards[drawRand2].getCardNumber()));
-				deckCards[drawRand] = null;
-				deckCards[drawRand2] = null;
-			}
-			else if(deckCards[drawRand2].isAFaceCard()){
-				System.out.println("Player " + (i + 1) + " has a "
-						+ deckCards[drawRand].getCardNumber() + " of "
-						+ deckCards[drawRand].getSuit() + " and a "
-						+ deckCards[drawRand2].getFaceCard() + " of "
-						+ deckCards[drawRand2].getSuit() + " for a total of "
-						+ (deckCards[drawRand].getCardNumber() + deckCards[drawRand2].getCardNumber()));
-				deckCards[drawRand] = null;
-				deckCards[drawRand2] = null;
+			
+			System.out.println("How many Players are there?:");
+			int players = sc.nextInt();
+			int rand1 = (int)(Math.random()* totalCards.size());
+			int playerTotal = totalCards.get(rand1).getCardNumber();
+			System.out.print("Your cards are: " + totalCards.get(rand1).getCardNumber() + " of " + totalCards.remove(rand1).getSuit());
+			int rand2 = (int)(Math.random()* totalCards.size());
+			playerTotal += totalCards.get(rand2).getCardNumber();
+			System.out.println(" and " + totalCards.get(rand2).getCardNumber() + " of " + totalCards.remove(rand2).getSuit()
+					+ " for a total of " + playerTotal);
+			System.out.println("would you like to hit or stay? (Press 1 to hit and 0 to stay)");
+			boolean hit;
+			int hitCheck = sc.nextInt();
+			if(hitCheck == 1){
+				hit = true;
 			}
 			else{
-				System.out.println("Player " + (i + 1) + " has a "
-					+ deckCards[drawRand].getCardNumber() + " of "
-					+ deckCards[drawRand].getSuit() + " and a "
-					+ deckCards[drawRand2].getCardNumber() + " of "
-					+ deckCards[drawRand2].getSuit() + " for a total of "
-					+ (deckCards[drawRand].getCardNumber() + deckCards[drawRand2].getCardNumber()));
-			deckCards[drawRand] = null;
-			deckCards[drawRand2] = null;
+				hit = false;
 			}
-		}
-		deckCards = Cards.shuffle(deckCards);
-	}
-}
+			while(hit){ //Continues to prompt the user as to whether they want to hit or stay.
+				int rand3 = (int)(Math.random()* totalCards.size());
+				playerTotal += totalCards.get(rand3).getCardNumber();
+				if(totalCards.get(rand3).isAFaceCard()){
+					System.out.println("You just got a " + totalCards.get(rand3).getFaceCard() + " of " + totalCards.remove(rand3).getSuit() + " for a total"
+							+ " of " + playerTotal);
+				}
+				else{
+				System.out.println("You just got a " + totalCards.get(rand3).getCardNumber() + " of " + totalCards.remove(rand3).getSuit() + " for a total"
+						+ " of " + playerTotal);
+				}
+				if(playerTotal > 21){ //Checks for Bust
+					System.out.println("You have Busted!");
+					hit = false;
+					bust = true;
+				}
+				else if(playerTotal == 21){ //Checks for BlackJack
+					System.out.println("You have reached BlackJack!");
+					hit = false;
+					blackJack = true;
+				}
+				else{ //Prompting if not bust or BlackJack
+					int hitCheck1 = sc.nextInt();
+					if(hitCheck1 == 1){
+						hit = true;
+					}
+					else{
+						hit = false;
+					}
+				}
+			}//End while(hit){
+			int dealerTotal = 0;
+			if(!blackJack){
+				if(!bust){
+					System.out.println("Now the Dealer will play!");
+					while(dealerTotal < 17){
+						int rand4 = (int)(Math.random()*totalCards.size());
+						dealerTotal += totalCards.remove(rand4).getCardNumber();
+					}
+				}
+				if(dealerTotal > 21){
+					dealerBust = true;
+				}
+				if(!bust){
+					if(!dealerBust){
+						if(dealerTotal <= playerTotal)
+							System.out.println("The dealer's total was " + dealerTotal + ", and your total was " + playerTotal + ", so you win!");
+						else if(dealerTotal > playerTotal)
+							System.out.println("The dealer's total was " + dealerTotal + ", and your total was " + playerTotal + ", so you lose!");
+					}//End if(!dealerBust){
+					else
+						System.out.println("The dealer has busted with a total of " + dealerTotal + "! You win!");
+				}//End if(!bust){
+			}//End if(!blackJack){
+			System.out.println("Would you like to play again? (1 for yes 0 for no)");
+			int again = sc.nextInt();
+			if(again == 1)
+				gameOn = true;
+			else
+				gameOn = false;
+		}//End while(gameOn){
+	}//End main(String[] args){
+}//End Class BlackJack0{
